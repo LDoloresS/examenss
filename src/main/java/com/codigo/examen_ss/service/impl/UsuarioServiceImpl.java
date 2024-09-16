@@ -7,7 +7,9 @@ import com.codigo.examen_ss.aggregates.response.ReniecResponse;
 import com.codigo.examen_ss.client.ReniecClient;
 import com.codigo.examen_ss.entity.UsuarioEntity;
 import com.codigo.examen_ss.repository.UsuarioRepository;
+import com.codigo.examen_ss.service.RedisService;
 import com.codigo.examen_ss.service.UsuarioService;
+import com.codigo.examen_ss.util.Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,12 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ReniecClient reniecClient;
+    private final RedisService redisService;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, ReniecClient reniecClient) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, ReniecClient reniecClient, RedisService redisService) {
         this.usuarioRepository = usuarioRepository;
         this.reniecClient = reniecClient;
+        this.redisService = redisService;
     }
 
     @Value("${token.api}")
@@ -69,17 +73,24 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(String dni) {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
-        Optional<UsuarioEntity> usuarioBuscar = usuarioRepository.findByNumDoc(dni);
-        if (usuarioBuscar.isPresent()) {
-            baseResponse.setCode(Constants.OK_DNI_CODE);
-            baseResponse.setMessage(Constants.OK_DNI_MESS);
-            baseResponse.setObjeto(usuarioBuscar);
-        } else {
+        try {
+            Optional<UsuarioEntity> usuarioBuscar = executionBuscarUsuarioDni(dni);
+            if (usuarioBuscar.isPresent()) {
+                baseResponse.setCode(Constants.OK_DNI_CODE);
+                baseResponse.setMessage(Constants.OK_DNI_MESS);
+                baseResponse.setObjeto(usuarioBuscar);
+            } else {
+                baseResponse.setCode(Constants.ERROR_DNI_CODE);
+                baseResponse.setMessage(Constants.ERROR_DNI_MESS);
+                baseResponse.setObjeto(Optional.empty());
+            }
+            return ResponseEntity.ok(baseResponse);
+        } catch (Exception e) {
             baseResponse.setCode(Constants.ERROR_DNI_CODE);
-            baseResponse.setMessage(Constants.ERROR_DNI_MESS);
+            baseResponse.setMessage(Constants.ERROR_DNI_MESS + " -> " + e.getMessage());
             baseResponse.setObjeto(Optional.empty());
+            return ResponseEntity.ok(baseResponse);
         }
-        return ResponseEntity.ok(baseResponse);
     }
 
     @Override
@@ -140,6 +151,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private UsuarioEntity getEntityUpdate(UsuarioRequest usuarioRequest, UsuarioEntity usuarioEntity) {
         if (usuarioRequest != null) {
+            redisService.deleteByKey(Constants.REDIS_KEY_API_PERSON + usuarioRequest.getNumDoc());
             usuarioEntity.setNombres(usuarioRequest.getNombres());
             usuarioEntity.setApPaterno(usuarioRequest.getApPaterno());
             usuarioEntity.setApMaterno(usuarioRequest.getApMaterno());
@@ -149,5 +161,20 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioEntity.setDate_upda(new Timestamp(System.currentTimeMillis()));
         }
         return usuarioEntity;
+    }
+
+    private Optional<UsuarioEntity> executionBuscarUsuarioDni(String dni) {
+        String redisInfo = redisService.getValueByKey(Constants.REDIS_KEY_API_PERSON + dni);
+        if (Objects.nonNull(redisInfo)) {
+            return Optional.of(Utils.convertirDesdeString(redisInfo, UsuarioEntity.class));
+        } else {
+            Optional<UsuarioEntity> usuarioBuscar = usuarioRepository.findByNumDoc(dni);
+            if (usuarioBuscar.isPresent()) {
+                UsuarioEntity usuarioEntity = usuarioBuscar.get();
+                String dataForRedis = Utils.convertirAString(usuarioEntity);
+                redisService.saveKeyValue(Constants.REDIS_KEY_API_PERSON + dni, dataForRedis, Constants.REDIS_EXP);
+            }
+            return usuarioBuscar;
+        }
     }
 }

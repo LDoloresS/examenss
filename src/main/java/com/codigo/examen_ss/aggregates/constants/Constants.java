@@ -14,4 +14,6 @@ public class Constants {
     public static final String ERROR_MESS_UPD = "ERROR AL ACTUALIZAR";
     public static final Integer ERROR_CODE_DEL = 2007;
     public static final String ERROR_MESS_DEL = "ERROR AL ELIMINAR";
+    public static final String REDIS_KEY_API_PERSON = "MS:EXAMENSS:";
+    public static final Integer REDIS_EXP = 5;
 }
