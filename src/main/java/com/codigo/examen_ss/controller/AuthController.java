@@ -22,7 +22,7 @@ public class AuthController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/usuarios/crear")
-    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(@RequestBody UsuarioRequest usuarioRequest) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(@RequestBody UsuarioRequest usuarioRequest) throws Exception {
         BaseResponse<UsuarioEntity> response = usuarioService.crearUsuario(usuarioRequest).getBody();
         if (response.getCode().equals(Constants.OK_DNI_CODE)) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -32,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/usuarios/signin")
-    public ResponseEntity<BaseResponse<SignInResponse>> signIn(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<BaseResponse<SignInResponse>> signIn(@RequestBody SignInRequest signInRequest) throws Exception {
         BaseResponse<SignInResponse> response = usuarioService.signIn(signInRequest).getBody();
         if (response.getCode().equals(Constants.OK_DNI_CODE)) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);

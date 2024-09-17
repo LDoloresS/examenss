@@ -6,8 +6,6 @@ public class Constants {
     public static final String OK_DNI_MESS = "REGISTRADO XVR!";
     public static final Integer ERROR_DNI_CODE = 2004;
     public static final String ERROR_DNI_MESS = "ERROR CON EL DNI";
-    public static final Integer STATUS_ACTIVE = 1;
-    public static final Integer STATUS_INACTIVE = 0;
     public static final Integer ERROR_CODE_LIST_EMPTY = 2009;
     public static final String ERROR_MESS_LIST_EMPTY = "NO HAY REGISTROS!!";
     public static final Integer ERROR_CODE_UPD = 2008;
@@ -20,11 +18,23 @@ public class Constants {
     public static final String CLAVE_AccountNonLocked = "isAccountNonLocked";
     public static final String CLAVE_CredentialsNonExpired = "isCredentialsNonExpired";
     public static final String CLAVE_Enabled = "isEnabled";
-    public static final Boolean ESTADO_ACTIVO = true;
+    public static final Boolean STATUS_ACTIVE = true;
     public static final Integer ERROR_CODE_LOGIN = 2005;
     public static final String ERROR_MESS_LOGIN = "ERROR AL LOGUEARSE";
     public static final String ENPOINTS_PERMIT = "/api/examensbss_lin/authentication/v1/**";
     public static final String ENPOINTS_USER = "/api/examensbss_lin/user/v1/**";
     public static final String ENPOINTS_ADMIN = "/api/examensbss_lin/admin/v1/**";
     public static final String ENPOINTS_DEBUG = "/api/examensbss_lin/usuarios/v1/**";
+    public static final Integer ERROR_TRX_CODE = 4009;
+    public static final String ERROR_TRX_MESS = "ERROR DURANTE LA TRANSACCION: ";
+    public static final Integer ERROR_TRX_API_EXCEPTION_CODE = 4006;
+    public static final String ERROR_TRX_API_EXCEPTION_MESS = "ERROR DURANTE LA TRANSACCION - ETRX_API_EXCEPTION - EXCEPTION PERSONALIZADA: ";
+    public static final Integer ERROR_NULLPOINTER_CODE = 2005;
+    public static final String ERROR_NULLPOINTER_MESS = "ERROR DURANTE LA TRANSACCION - NULLPOINTEREXCEPTION: ";
+    public static final Integer ERROR_RESOURCENOTFOUND_CODE = 4001;
+    public static final String ERROR_RESOURCENOTFOUND_MESS = "ERROR DURANTE LA TRANSACCION - CONFIGDATA_RESOURCENOTFOUNDEXCEPTION. EL RECURSO SOLICITADO NO FUE ENCONTRADO: ";
+    public static final Integer ERROR_ILLEGALARGUMENT_CODE = 4006;
+    public static final String ERROR_ILLEGALARGUMENT_MESS = "ERROR DURANTE LA TRANSACCION - CONFIGDATA_RESOURCENOTFOUNDEXCEPTION. LOS DATOS PROPORCIONADOS NO SON VÁLIDOS. POR FAVOR, VERIFICA LA INFORMACIÓN ENVIADA: ";
+    public static final Integer ERROR_AUTHENTICATION_CODE = 4006;
+    public static final String ERROR_AUTHENTICATION_MESS = "ERROR DURANTE LA TRANSACCION - AUTHENTICATIONEXCEPTION. AUTENTICACIÓN FALLIDA. EL TOKEN PROPORCIONADO NO ES VÁLIDO O HA EXPIRADO: ";
 }

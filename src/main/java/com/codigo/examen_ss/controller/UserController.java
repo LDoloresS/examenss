@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("usuarios/{dni}")
-    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(@PathVariable("dni") String dni) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(@PathVariable("dni") String dni) throws Exception {
         BaseResponse<UsuarioEntity> response = usuarioService.buscarUsuarioDni(dni).getBody();
         if (response.getCode().equals(Constants.OK_DNI_CODE)) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);

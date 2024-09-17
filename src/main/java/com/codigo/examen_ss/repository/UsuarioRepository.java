@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     Optional<UsuarioEntity> findByNumDoc(String numDoc);
 
-    List<UsuarioEntity> findByEstado(Integer estado);
+    List<UsuarioEntity> findByIsEnabled(boolean estado);
 
     Optional<UsuarioEntity> findByEmail(String email);
 /*

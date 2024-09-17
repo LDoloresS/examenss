@@ -30,10 +30,8 @@ public class UsuarioEntity implements UserDetails {
     private String tipoDoc;
     @Column(name = "numDoc", nullable = false, length = 8)
     private String numDoc;
-    @Column(name = "estado", nullable = false)
-    private Integer estado;
 
-    @Column(name = "email", nullable = false, length = 255)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
     @Column(name = "password", nullable = false, length = 255)
     private String password;

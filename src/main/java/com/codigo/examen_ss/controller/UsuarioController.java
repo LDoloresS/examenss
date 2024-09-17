@@ -21,7 +21,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(@RequestBody UsuarioRequest usuarioRequest) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(@RequestBody UsuarioRequest usuarioRequest) throws Exception {
         BaseResponse<UsuarioEntity> response = usuarioService.crearUsuario(usuarioRequest).getBody();
         if (response.getCode().equals(Constants.OK_DNI_CODE)) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -41,7 +41,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{dni}")
-    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(@PathVariable("dni") String dni) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(@PathVariable("dni") String dni) throws Exception {
         BaseResponse<UsuarioEntity> response = usuarioService.buscarUsuarioDni(dni).getBody();
         if (response.getCode().equals(Constants.OK_DNI_CODE)) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);

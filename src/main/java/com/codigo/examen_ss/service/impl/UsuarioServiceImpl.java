@@ -43,7 +43,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, ReniecClient reniecClient, RedisService redisService, UserDetailsServiceImpl userDetailsService, RolRepository rolRepository, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, ReniecClient reniecClient,
+                              RedisService redisService, UserDetailsServiceImpl userDetailsService,
+                              RolRepository rolRepository, AuthenticationManager authenticationManager,
+                              JwtService jwtService) {
         this.usuarioRepository = usuarioRepository;
         this.reniecClient = reniecClient;
         this.redisService = redisService;
@@ -58,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(UsuarioRequest usuarioRequest) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(UsuarioRequest usuarioRequest) throws Exception {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         try {
             Optional<UsuarioEntity> usuarioOptional = usuarioRepository.findByEmail(usuarioRequest.getEmail());
@@ -70,7 +73,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (Objects.nonNull(usuarioEntity)) {
                 usuarioEntity.setRoles(Collections.singleton(rol));
                 usuarioEntity.setPassword(new BCryptPasswordEncoder().encode(usuarioRequest.getPassword()));
-                usuarioEntity.setEstado(Constants.STATUS_ACTIVE);
+                usuarioEntity.setIsEnabled(Constants.STATUS_ACTIVE);
                 baseResponse.setCode(Constants.OK_DNI_CODE);
                 baseResponse.setMessage(Constants.OK_DNI_MESS);
                 baseResponse.setObjeto(Optional.of(usuarioRepository.save(usuarioEntity)));
@@ -88,7 +91,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public ResponseEntity<BaseResponse<List<UsuarioEntity>>> listarUsuarios() {
         BaseResponse<List<UsuarioEntity>> baseResponse = new BaseResponse<List<UsuarioEntity>>();
-        List<UsuarioEntity> usuarioEntityList = usuarioRepository.findByEstado(Constants.STATUS_ACTIVE);
+        List<UsuarioEntity> usuarioEntityList = usuarioRepository.findByIsEnabled(Constants.STATUS_ACTIVE);
         if (Objects.nonNull(usuarioEntityList)) {
             baseResponse.setCode(Constants.OK_DNI_CODE);
             baseResponse.setMessage(Constants.OK_DNI_MESS);
@@ -118,7 +121,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(String dni) {
+    public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(String dni) throws Exception {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         try {
             Optional<UsuarioEntity> usuarioBuscar = executionBuscarUsuarioDni(dni);
@@ -153,7 +156,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (Objects.nonNull(usuarioActualizar)) {
             usuarioActualizar.setRoles(Collections.singleton(rol));
             usuarioActualizar.setPassword(new BCryptPasswordEncoder().encode(usuarioRequest.getPassword()));
-            usuarioActualizar.setEstado(Constants.STATUS_ACTIVE);
+            usuarioActualizar.setIsEnabled(Constants.STATUS_ACTIVE);
             baseResponse.setCode(Constants.OK_DNI_CODE);
             baseResponse.setMessage(Constants.OK_DNI_MESS);
 
@@ -172,7 +175,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         if (usuarioRepository.existsById(id)) {
             UsuarioEntity usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
-            usuarioRecuperado.setEstado(0);
+            usuarioRecuperado.setIsEnabled(Constants.STATUS_ACTIVE);
             usuarioRecuperado.setUsua_dele(Constants.USU_CREA);
             usuarioRecuperado.setDate_dele(new Timestamp(System.currentTimeMillis()));
             baseResponse.setCode(Constants.OK_DNI_CODE);
@@ -201,7 +204,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     */
 
     @Override
-    public ResponseEntity<BaseResponse<SignInResponse>> signIn(SignInRequest signInRequest) {
+    public ResponseEntity<BaseResponse<SignInResponse>> signIn(SignInRequest signInRequest) throws Exception {
         BaseResponse<SignInResponse> baseResponse = new BaseResponse<SignInResponse>();
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -234,10 +237,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioEntity.setNumDoc(response.getNumeroDocumento());
 
             usuarioEntity.setEmail(usuarioRequest.getEmail());
-            usuarioEntity.setIsAccountNonExpired(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsAccountNonLocked(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsCredentialsNonExpired(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsEnabled(Constants.ESTADO_ACTIVO);
+            usuarioEntity.setIsAccountNonExpired(Constants.STATUS_ACTIVE);
+            usuarioEntity.setIsAccountNonLocked(Constants.STATUS_ACTIVE);
+            usuarioEntity.setIsCredentialsNonExpired(Constants.STATUS_ACTIVE);
 
             usuarioEntity.setUsua_crea(Constants.USU_CREA);
             usuarioEntity.setDate_crea(new Timestamp(System.currentTimeMillis()));
@@ -266,10 +268,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioEntity.setNumDoc(usuarioRequest.getNumDoc());
 
             usuarioEntity.setEmail(usuarioRequest.getEmail());
-            usuarioEntity.setIsAccountNonExpired(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsAccountNonLocked(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsCredentialsNonExpired(Constants.ESTADO_ACTIVO);
-            usuarioEntity.setIsEnabled(Constants.ESTADO_ACTIVO);
+            usuarioEntity.setIsAccountNonExpired(Constants.STATUS_ACTIVE);
+            usuarioEntity.setIsAccountNonLocked(Constants.STATUS_ACTIVE);
+            usuarioEntity.setIsCredentialsNonExpired(Constants.STATUS_ACTIVE);
 
             usuarioEntity.setUsua_upda(Constants.USU_CREA);
             usuarioEntity.setDate_upda(new Timestamp(System.currentTimeMillis()));
