@@ -16,4 +16,15 @@ public class Constants {
     public static final String ERROR_MESS_DEL = "ERROR AL ELIMINAR";
     public static final String REDIS_KEY_API_PERSON = "MS:EXAMENSS:";
     public static final Integer REDIS_EXP = 5;
+    public static final String CLAVE_AccountNonExpired = "isAccountNonExpired";
+    public static final String CLAVE_AccountNonLocked = "isAccountNonLocked";
+    public static final String CLAVE_CredentialsNonExpired = "isCredentialsNonExpired";
+    public static final String CLAVE_Enabled = "isEnabled";
+    public static final Boolean ESTADO_ACTIVO = true;
+    public static final Integer ERROR_CODE_LOGIN = 2005;
+    public static final String ERROR_MESS_LOGIN = "ERROR AL LOGUEARSE";
+    public static final String ENPOINTS_PERMIT = "/api/examensbss_lin/authentication/v1/**";
+    public static final String ENPOINTS_USER = "/api/examensbss_lin/user/v1/**";
+    public static final String ENPOINTS_ADMIN = "/api/examensbss_lin/admin/v1/**";
+    public static final String ENPOINTS_DEBUG = "/api/examensbss_lin/usuarios/v1/**";
 }

@@ -11,4 +11,7 @@ public class UsuarioRequest {
     private String nombres;
     private String apPaterno;
     private String apMaterno;
+    private String email;
+    private String password;
+    private String rol;
 }
