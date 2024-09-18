@@ -25,14 +25,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsServiceImpl userDetailsService;
-    //private final UsuarioService usuarioService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(Constants.ENPOINTS_PERMIT).permitAll()
-                        .requestMatchers(Constants.ENPOINTS_DEBUG).permitAll()
                         .requestMatchers(Constants.ENPOINTS_USER).hasAnyAuthority(Role.USER.name())
                         .requestMatchers(Constants.ENPOINTS_ADMIN).hasAnyAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated())
@@ -47,7 +45,6 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        //authenticationProvider.setUserDetailsService(usuarioService.userDetailsService());
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;

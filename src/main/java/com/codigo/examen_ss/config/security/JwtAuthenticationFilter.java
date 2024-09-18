@@ -24,7 +24,6 @@ import java.util.Objects;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsService;
-    //private final UsuarioService usuarioService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -45,7 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (Objects.nonNull(userEmail) &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            //UserDetails userDetails = usuarioService.userDetailsService().loadUserByUsername(userEmail);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.validateToken(tokenLimpio, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

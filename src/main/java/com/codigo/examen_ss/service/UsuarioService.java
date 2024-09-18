@@ -22,7 +22,5 @@ public interface UsuarioService {
 
     ResponseEntity<BaseResponse<UsuarioEntity>> eliminarUsuario(Long id);
 
-    //UserDetailsService userDetailsService();
-
     ResponseEntity<BaseResponse<SignInResponse>> signIn(SignInRequest signInRequest) throws Exception;
 }

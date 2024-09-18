@@ -44,14 +44,11 @@ public class JwtServiceImpl implements JwtService {
                 && !isTokenExpired(token));
     }
 
-    //METODO APRA GENERAR MI LLAVE USANDO MI CLAVE DE LOS PROP
-    // CON LA QUE VOY A FIRMAR MI TOKEN
     private Key getSignKey() {
         byte[] key = Decoders.BASE64.decode(keySignature);
         return Keys.hmacShaKeyFor(key);
     }
 
-    //METODO PARA EXTRAER EL PAYLOAD (CLAIMS) DEL TOKEN
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(getSignKey()).build()
                 .parseClaimsJws(token).getBody();
@@ -75,7 +72,6 @@ public class JwtServiceImpl implements JwtService {
         return claims;
     }
 
-    //DIFERENCIA ENTRE GENERICOS Y REFERENCIALES.
     private <T> List<T> getLista() {
         return new ArrayList<>();
     }

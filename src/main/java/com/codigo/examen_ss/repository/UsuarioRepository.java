@@ -14,11 +14,4 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     List<UsuarioEntity> findByIsEnabled(boolean estado);
 
     Optional<UsuarioEntity> findByEmail(String email);
-/*
-    //SQL NATIVO
-    @Transactional
-    @Modifying
-    @Query(value = "DELETE FROM usuario_rol WHERE id_usuario = :id_usuario", nativeQuery = true)
-    void usuario_rolD(@Param("id_usuario") Long id_usuario);
- */
 }

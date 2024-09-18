@@ -25,7 +25,6 @@ public class Constants {
     public static final String ENPOINTS_PERMIT = "/api/examensbss_lin/authentication/v1/**";
     public static final String ENPOINTS_USER = "/api/examensbss_lin/user/v1/**";
     public static final String ENPOINTS_ADMIN = "/api/examensbss_lin/admin/v1/**";
-    public static final String ENPOINTS_DEBUG = "/api/examensbss_lin/usuarios/v1/**";
     public static final Integer ERROR_TRX_CODE = 4009;
     public static final String ERROR_TRX_MESS = "ERROR DURANTE LA TRANSACCION: ";
     public static final Integer ERROR_TRX_API_EXCEPTION_CODE = 4006;

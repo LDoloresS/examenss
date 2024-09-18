@@ -86,7 +86,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             baseResponse.setObjeto(Optional.empty());
             return ResponseEntity.ok(baseResponse);
         }
-        //return new UsuarioResponse(usuario.getEmail(), usuario.getRole().getNameRole());
     }
 
     @Override
@@ -161,7 +160,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             baseResponse.setCode(Constants.OK_DNI_CODE);
             baseResponse.setMessage(Constants.OK_DNI_MESS);
 
-            //usuarioRepository.usuario_rolD(usuarioActualizar.getId());
             baseResponse.setObjeto(Optional.of(usuarioRepository.save(usuarioActualizar)));
         } else {
             baseResponse.setCode(Constants.ERROR_CODE_UPD);
@@ -190,20 +188,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return ResponseEntity.ok(baseResponse);
     }
 
-    /*
-    @Override
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username)
-                    throws UsernameNotFoundException {
-                return usuarioRepository.findByEmail(username).orElseThrow(
-                        () -> new UsernameNotFoundException("USUARIO NO ENCONTRADO"));
-            }
-        };
-    }
-    */
-
     @Override
     public ResponseEntity<BaseResponse<SignInResponse>> signIn(SignInRequest signInRequest) throws Exception {
         BaseResponse<SignInResponse> baseResponse = new BaseResponse<SignInResponse>();
@@ -211,7 +195,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                 new UsernamePasswordAuthenticationToken(
                         signInRequest.getEmail(), signInRequest.getPassword()));
         if (auth.isAuthenticated()) {
-            //UserDetails userDetails = userDetailsService().loadUserByUsername(signInRequest.getEmail());
             UserDetails userDetails = userDetailsService.loadUserByUsername(signInRequest.getEmail());
             var token = jwtService.generateToken(userDetails);
             SignInResponse response = new SignInResponse();
@@ -256,12 +239,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioEntity getUsuarioEntityUpdate(UsuarioRequest usuarioRequest, UsuarioEntity usuarioEntity) {
         if (usuarioRequest != null) {
             redisService.deleteByKey(Constants.REDIS_KEY_API_PERSON + usuarioRequest.getNumDoc());
-            /*
-            String redisInfo = redisService.getValueByKey(Constants.REDIS_KEY_API_PERSON + usuarioRequest.getNumDoc());
-            if (Objects.nonNull(redisInfo)) {
-                redisService.deleteByKey(Constants.REDIS_KEY_API_PERSON + usuarioRequest.getNumDoc());
-            }
-            */
+
             usuarioEntity.setNombres(usuarioRequest.getNombres());
             usuarioEntity.setApPaterno(usuarioRequest.getApPaterno());
             usuarioEntity.setApMaterno(usuarioRequest.getApMaterno());
