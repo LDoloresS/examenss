@@ -64,7 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(UsuarioRequest usuarioRequest) throws Exception {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         try {
-            boolean existEmail = usuarioRepository.existsByByEmail(usuarioRequest.getEmail());
+            boolean existEmail = usuarioRepository.existsByEmail(usuarioRequest.getEmail());
             Rol rol = getRoles(Role.valueOf(usuarioRequest.getRol()));
             if (existEmail || Objects.isNull(rol) || rol.equals("")) {
                 return null;
@@ -176,7 +176,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         if (usuarioRepository.existsById(id)) {
             UsuarioEntity usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
-            usuarioRecuperado.setIsEnabled(Constants.STATUS_ACTIVE);
+            usuarioRecuperado.setIsEnabled(Constants.STATUS_INACTIVE);
             usuarioRecuperado.setUsua_dele(Constants.USU_CREA);
             usuarioRecuperado.setDate_dele(new Timestamp(System.currentTimeMillis()));
             baseResponse.setCode(Constants.OK_DNI_CODE);

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
-    boolean existsByByEmail(String email);
+    boolean existsByEmail(String email);
 
     Optional<UsuarioEntity> findByNumDoc(String numDoc);
 

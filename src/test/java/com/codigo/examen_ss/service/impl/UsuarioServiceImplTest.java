@@ -55,7 +55,7 @@ class UsuarioServiceImplTest {
         responseReniec.setNumeroDocumento(request.getNumDoc());
 
         //CUANDO EJECUTES... debes devolver...
-        when(usuarioRepository.existsByByEmail(anyString())).thenReturn(false);
+        when(usuarioRepository.existsByEmail(anyString())).thenReturn(false);
         when(rolRepository.findByNombre("ADMIN")).thenReturn(Optional.of(rol));
         when(reniecClient.getPersonaReniec(anyString(), anyString())).thenReturn(responseReniec);
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
@@ -71,4 +71,5 @@ class UsuarioServiceImplTest {
         assertTrue(response.getBody().getObjeto().isPresent());
         assertSame(usuarioEntity, response.getBody().getObjeto().get());
     }
+
 }
