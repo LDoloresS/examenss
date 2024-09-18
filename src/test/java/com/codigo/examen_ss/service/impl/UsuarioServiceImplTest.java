@@ -47,6 +47,7 @@ class UsuarioServiceImplTest {
         UsuarioRequest request = new UsuarioRequest();
         request.setNumDoc("12345678");
         request.setEmail("ejemplo@test.com");
+        request.setPassword("123456abc");
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         Rol rol = new Rol(1L, "ADMIN");
         request.setRol(rol.getNombre());
@@ -69,10 +70,5 @@ class UsuarioServiceImplTest {
                 "El Mensaje de respuesta debe ser igual MSJ_OK de Constants");
         assertTrue(response.getBody().getObjeto().isPresent());
         assertSame(usuarioEntity, response.getBody().getObjeto().get());
-        assertEquals(Constants.OK_DNI_CODE, response.getBody().getCode(),
-                "El Código de respuesta debe ser igual al 1001");
-        assertEquals(Constants.OK_DNI_MESS, response.getBody().getMessage(),
-                "El Mensaje de respuesta debe ser igual MSJ_EXIST de Constants");
-        assertTrue(response.getBody().getObjeto().isEmpty());
     }
 }
