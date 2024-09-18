@@ -64,9 +64,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(UsuarioRequest usuarioRequest) throws Exception {
         BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
         try {
-            Optional<UsuarioEntity> usuarioOptional = usuarioRepository.findByEmail(usuarioRequest.getEmail());
+            boolean existEmail = usuarioRepository.existsByByEmail(usuarioRequest.getEmail());
             Rol rol = getRoles(Role.valueOf(usuarioRequest.getRol()));
-            if (usuarioOptional.isPresent() || Objects.isNull(rol) || rol.equals("")) {
+            if (existEmail || Objects.isNull(rol) || rol.equals("")) {
                 return null;
             }
             UsuarioEntity usuarioEntity = getUsuarioEntity(usuarioRequest);
@@ -74,6 +74,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usuarioEntity.setRoles(Collections.singleton(rol));
                 usuarioEntity.setPassword(new BCryptPasswordEncoder().encode(usuarioRequest.getPassword()));
                 usuarioEntity.setIsEnabled(Constants.STATUS_ACTIVE);
+
                 baseResponse.setCode(Constants.OK_DNI_CODE);
                 baseResponse.setMessage(Constants.OK_DNI_MESS);
                 baseResponse.setObjeto(Optional.of(usuarioRepository.save(usuarioEntity)));
