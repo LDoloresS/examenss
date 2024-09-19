@@ -37,6 +37,7 @@
         <!-- Exclusiones en Sonar -->
         <sonar.exclusions>**/Constants.java</sonar.exclusions>
         <sonar.exclusions>**/ExamenSsApplication.java</sonar.exclusions>
+        <sonar.exclusions>**/ExamenSsApplicationTests.java</sonar.exclusions>
         <!-- Jacoco Config -->
         <jacoco.version>0.8.7</jacoco.version>
         <!-- Relacionando a SonarQuBe con Jacoco -->
@@ -138,6 +139,7 @@
                             <excludes>
                                 <exclude>**Constants.java</exclude>
                                 <exclude>**/ExamenSsApplication.java</exclude>
+                                <exclude>**/ExamenSsApplicationTests.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>

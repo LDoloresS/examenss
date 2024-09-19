@@ -62,7 +62,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public ResponseEntity<BaseResponse<UsuarioEntity>> crearUsuario(UsuarioRequest usuarioRequest) throws Exception {
-        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
+        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<>();
         try {
             boolean existEmail = usuarioRepository.existsByEmail(usuarioRequest.getEmail());
             Rol rol = getRoles(Role.valueOf(usuarioRequest.getRol()));
@@ -90,7 +90,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public ResponseEntity<BaseResponse<List<UsuarioEntity>>> listarUsuarios() {
-        BaseResponse<List<UsuarioEntity>> baseResponse = new BaseResponse<List<UsuarioEntity>>();
+        BaseResponse<List<UsuarioEntity>> baseResponse = new BaseResponse<>();
         List<UsuarioEntity> usuarioEntityList = usuarioRepository.findByIsEnabled(Constants.STATUS_ACTIVE);
         if (Objects.nonNull(usuarioEntityList)) {
             baseResponse.setCode(Constants.OK_DNI_CODE);
@@ -106,7 +106,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public ResponseEntity<BaseResponse<List<UsuarioEntity>>> listarUsuariosAll() {
-        BaseResponse<List<UsuarioEntity>> baseResponse = new BaseResponse<List<UsuarioEntity>>();
+        BaseResponse<List<UsuarioEntity>> baseResponse = new BaseResponse<>();
         List<UsuarioEntity> usuarioEntityList = usuarioRepository.findAll();
         if (Objects.nonNull(usuarioEntityList)) {
             baseResponse.setCode(Constants.OK_DNI_CODE);
@@ -122,7 +122,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public ResponseEntity<BaseResponse<UsuarioEntity>> buscarUsuarioDni(String dni) throws Exception {
-        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
+        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<>();
         try {
             Optional<UsuarioEntity> usuarioBuscar = executionBuscarUsuarioDni(dni);
             if (usuarioBuscar.isPresent()) {
@@ -146,7 +146,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public ResponseEntity<BaseResponse<UsuarioEntity>> actualizarUsuario(Long id, UsuarioRequest usuarioRequest) {
-        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
+        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<>();
         Optional<UsuarioEntity> usuarioExistente = usuarioRepository.findById(id);
         Rol rol = getRoles(Role.valueOf(usuarioRequest.getRol()));
         if (usuarioExistente.isEmpty() || Objects.isNull(rol) || rol.equals("")) {
@@ -171,7 +171,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public ResponseEntity<BaseResponse<UsuarioEntity>> eliminarUsuario(Long id) {
-        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<UsuarioEntity>();
+        BaseResponse<UsuarioEntity> baseResponse = new BaseResponse<>();
         if (usuarioRepository.existsById(id)) {
             UsuarioEntity usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
             usuarioRecuperado.setIsEnabled(Constants.STATUS_INACTIVE);
@@ -190,7 +190,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public ResponseEntity<BaseResponse<SignInResponse>> signIn(SignInRequest signInRequest) throws Exception {
-        BaseResponse<SignInResponse> baseResponse = new BaseResponse<SignInResponse>();
+        BaseResponse<SignInResponse> baseResponse = new BaseResponse<>();
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         signInRequest.getEmail(), signInRequest.getPassword()));
@@ -236,10 +236,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         return reniecClient.getPersonaReniec(dni, auth);
     }
 
-    private UsuarioEntity getUsuarioEntityUpdate(UsuarioRequest usuarioRequest, UsuarioEntity usuarioEntity) {
+    private UsuarioEntity getUsuarioEntityUpdate(UsuarioRequest usuarioRequest, UsuarioEntity usuarioDB) {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
         if (usuarioRequest != null) {
             redisService.deleteByKey(Constants.REDIS_KEY_API_PERSON + usuarioRequest.getNumDoc());
 
+            usuarioEntity.setId(usuarioDB.getId());
             usuarioEntity.setNombres(usuarioRequest.getNombres());
             usuarioEntity.setApPaterno(usuarioRequest.getApPaterno());
             usuarioEntity.setApMaterno(usuarioRequest.getApMaterno());
@@ -253,6 +255,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
             usuarioEntity.setUsua_upda(Constants.USU_CREA);
             usuarioEntity.setDate_upda(new Timestamp(System.currentTimeMillis()));
+            usuarioEntity.setUsua_crea(usuarioDB.getUsua_crea());
+            usuarioEntity.setDate_crea(usuarioDB.getDate_crea());
+            usuarioEntity.setUsua_dele(usuarioDB.getUsua_dele());
+            usuarioEntity.setDate_dele(usuarioDB.getDate_dele());
         }
         return usuarioEntity;
     }
@@ -274,7 +280,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private Rol getRoles(Role rolBuscado) {
         return rolRepository.findByNombre(rolBuscado.name())
-                .orElseThrow(() -> new RuntimeException("EL ROL BSUCADO NO EXISTE : "
+                .orElseThrow(() -> new RuntimeException("EL ROL BUSCADO NO EXISTE: "
                         + rolBuscado.name()));
     }
 }

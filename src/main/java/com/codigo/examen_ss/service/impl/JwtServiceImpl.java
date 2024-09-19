@@ -65,10 +65,10 @@ public class JwtServiceImpl implements JwtService {
 
     private Map<String, Object> addClaim(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(Constants.CLAVE_AccountNonLocked, userDetails.isAccountNonLocked());
-        claims.put(Constants.CLAVE_AccountNonExpired, userDetails.isAccountNonExpired());
-        claims.put(Constants.CLAVE_CredentialsNonExpired, userDetails.isCredentialsNonExpired());
-        claims.put(Constants.CLAVE_Enabled, userDetails.isEnabled());
+        claims.put(Constants.CLAVE_ACCOUNTNONLOCKED, userDetails.isAccountNonLocked());
+        claims.put(Constants.CLAVE_ACCOUNTNONEXPIRED, userDetails.isAccountNonExpired());
+        claims.put(Constants.CLAVE_CREDENTIALSNONEXPIRED, userDetails.isCredentialsNonExpired());
+        claims.put(Constants.CLAVE_ENABLED, userDetails.isEnabled());
         return claims;
     }
 
